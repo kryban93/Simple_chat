@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { database } from '../../firebase';
+import { useAuth } from '../../contexts/AuthContext';
+import { useHistory } from 'react-router-dom';
 
 const MainPage = () => {
   const [usersArray, setUsersArray] = useState([]);
@@ -7,6 +9,9 @@ const MainPage = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   let usersRef = database.ref('users');
+  const { logout, currentUser } = useAuth();
+  const [error, setError] = useState('');
+  const history = useHistory();
 
   useEffect(() => {
     console.log('loading');
@@ -40,6 +45,15 @@ const MainPage = () => {
     });
   }
 
+  function handleLogout() {
+    try {
+      logout();
+      history.push('/login');
+    } catch {
+      setError('Failed to logout');
+    }
+  }
+
   return (
     <div>
       <h1>This is chat,see users</h1>
@@ -50,7 +64,6 @@ const MainPage = () => {
             </p>
           ))
         : null}
-
       <form onSubmit={handleSubmit}>
         <label>
           <input
@@ -70,6 +83,9 @@ const MainPage = () => {
         </label>
         <button>add</button>
       </form>
+      {currentUser ? <p>{currentUser.email}</p> : null}
+
+      <button onClick={handleLogout}>logout</button>
     </div>
   );
 };

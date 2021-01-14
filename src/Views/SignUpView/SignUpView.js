@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import style from './SignUpView.module.scss';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -10,6 +10,7 @@ function SignUpView() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
+  const history = useHistory();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -22,6 +23,7 @@ function SignUpView() {
       setError('');
       setLoading(true);
       await signUp(login, password);
+      history.push('/main');
     } catch {
       setError('Failed to create an account');
     }
@@ -31,8 +33,8 @@ function SignUpView() {
   return (
     <div className={style.container}>
       <h2>Sign Up form</h2>
-      {error && <p>{error}</p>}
       <form className={style.form} onSubmit={handleSubmit}>
+        {error && <p>{error}</p>}
         <label className={style.label}>
           <input
             type='email'
