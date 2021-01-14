@@ -4,7 +4,7 @@ import style from './SignUpView.module.scss';
 import { useAuth } from '../../contexts/AuthContext';
 
 function SignUpView() {
-  const [login, setLogin] = useState('');
+  const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState('');
@@ -22,7 +22,7 @@ function SignUpView() {
     try {
       setError('');
       setLoading(true);
-      await signUp(login, password);
+      await signUp(email, password);
       history.push('/main');
     } catch {
       setError('Failed to create an account');
@@ -39,12 +39,12 @@ function SignUpView() {
           <input
             type='email'
             className={style.input}
-            onChange={(e) => setLogin(e.target.value)}
-            value={login}
-            placeholder='login'
+            onChange={(e) => setemail(e.target.value)}
+            value={email}
+            placeholder='email'
             required
           />
-          login
+          email
         </label>
         <label className={style.label}>
           <input

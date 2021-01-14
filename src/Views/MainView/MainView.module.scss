@@ -1,0 +1,25 @@
+@import '../../variables.scss';
+
+.messagebox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(150, 169, 186, 0.7);
+  border-radius: 14px;
+  margin: 10px;
+
+  &_input {
+    border: none;
+    margin-left: 20px;
+  }
+
+  &_btn {
+    border: none;
+    background-color: $secondary;
+    color: white;
+    font-size: 14px;
+    border-radius: 14px;
+    padding: 3px;
+  }
+}

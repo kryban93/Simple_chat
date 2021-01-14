@@ -26,7 +26,7 @@ function LoginView() {
   };
 
   return (
-    <div>
+    <div className={style.container}>
       <h2>Login to start chat</h2>
       <form onSubmit={handleSubmit} className={style.form}>
         {error && <p className=''>{error}</p>}
