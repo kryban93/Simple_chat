@@ -3,57 +3,70 @@ import { useAuth } from '../../contexts/AuthContext';
 import Nav from '../../Components/Nav/Nav';
 import style from './MainView.module.scss';
 import { database } from '../../firebase';
+import sendIcon from '../../assets/send.svg';
+import MessageBox from '../../Components/MessageBox/MessageBox';
 
 function MainView() {
   const [message, setMessage] = useState('');
   const [messagesArray, setMessagesArray] = useState([]);
   const { currentUser } = useAuth();
-  let messagesRef = database.ref('messages');
+  const messagesRef = database.collection('messages');
 
   useEffect(() => {
     readDataFromDatabase();
   }, []);
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    let newMessage = messagesRef.push();
-    newMessage.set({
-      user: currentUser.email,
-      timestamp: new Date(),
-      message,
-    });
+    await messagesRef
+      .add({
+        user: currentUser.email,
+        timestamp: Date.now(),
+        text: message,
+        photoURL: 'www.photo.com',
+      })
+      .then((ref) => {
+        console.log('Document written with ID', ref.id);
+      })
+      .catch((error) => {
+        console.log('Error adding document: ', error);
+      });
   }
 
   function readDataFromDatabase() {
-    messagesRef.on('value', (snapshot) => {
-      const data = snapshot.val();
-      console.log(data);
-      const tempState = [];
-      for (let item in data) {
-        tempState.push({
-          message: data[item].message,
-          user: data[item].user,
+    messagesRef.onSnapshot(
+      (snapshotQueries) => {
+        let tempState = [];
+        snapshotQueries.forEach((doc) => {
+          tempState.push(doc.data());
         });
+        const sortedState = tempState.sort((a, b) => {
+          return new Date(a.timestamp) - new Date(b.timestamp);
+        });
+
+        setMessagesArray(sortedState);
+      },
+      (error) => {
+        console.log('Cannot read the data, error: ', error);
       }
-      console.log(tempState);
-      setMessagesArray(tempState);
-    });
+    );
   }
 
   return (
     <div>
       <Nav />
-      <p>hello</p>
       <p>{currentUser.email}</p>
-
-      {messagesArray
-        ? messagesArray.map((item) => (
-            <p key={`${messagesArray.indexOf(item)}`}>
-              {item.message} , {item.user}
-            </p>
-          ))
-        : null}
-
+      <div className={style.chat}>
+        {messagesArray
+          ? messagesArray.map((item) => (
+              <MessageBox
+                key={`${messagesArray.indexOf(item)}`}
+                text={item.text}
+                userId={item.user}
+              />
+            ))
+          : null}
+      </div>
       <div className={style.messagebox}>
         <input
           type='text'
@@ -63,6 +76,7 @@ function MainView() {
         />
         <button className={style['messagebox_btn']} onClick={handleSubmit}>
           send
+          <img src={sendIcon} alt='send icon' />
         </button>
       </div>
     </div>

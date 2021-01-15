@@ -1,10 +1,10 @@
 import React from 'react';
-import './MessageBox.scss';
+import style from './MessageBox.module.scss';
 
-function MessageBox() {
+function MessageBox({ text, userId, photoUrl }) {
   return (
-    <div>
-      <p>hello</p>
+    <div className={style.container}>
+      <p className={style.text}>{text}</p>
     </div>
   );
 }
