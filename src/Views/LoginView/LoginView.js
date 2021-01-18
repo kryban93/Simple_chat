@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import style from './LoginView.module.scss';
 import { useAuth } from '../../contexts/AuthContext';
+import { useData } from '../../contexts/DataContext';
 
 function LoginView() {
   const [emailState, setEmailState] = useState('');
   const [passwordState, setPasswordState] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { authUserWithFirebase } = useData();
   const [error, setError] = useState('');
   const history = useHistory();
 
@@ -17,7 +19,13 @@ function LoginView() {
     try {
       setError('');
       setLoading(true);
-      await login(emailState, passwordState);
+      await login(emailState, passwordState)
+        .then((user) => {
+          authUserWithFirebase(user);
+        })
+        .catch((error) => {
+          console.log(`${error.code}: ${error.message}`);
+        });
       history.push('/main');
     } catch {
       setError('Failed to log in');

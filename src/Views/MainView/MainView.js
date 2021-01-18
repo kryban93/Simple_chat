@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
 import Nav from '../../Components/Nav/Nav';
 import style from './MainView.module.scss';
-import { database } from '../../firebase';
 import sendIcon from '../../assets/send.svg';
 import MessageBox from '../../Components/MessageBox/MessageBox';
+import Sidebar from '../../Components/Sidebar/Sidebar';
+import { useData } from '../../contexts/DataContext';
 
 function MainView() {
   const [message, setMessage] = useState('');
-  const [messagesArray, setMessagesArray] = useState([]);
-  const { currentUser } = useAuth();
-  const messagesRef = database.collection('messages');
-
+  const { currentUser } = useData();
   useEffect(() => {
-    readDataFromDatabase();
-  }, []);
+    //readDataFromDatabase();
+    console.log(currentUser);
+  }, [currentUser]);
 
-  async function handleSubmit(event) {
+  /* async function handleSubmit(event) {
     event.preventDefault();
     await messagesRef
       .add({
@@ -31,8 +29,8 @@ function MainView() {
       .catch((error) => {
         console.log('Error adding document: ', error);
       });
-  }
-
+  } */
+  /*
   function readDataFromDatabase() {
     messagesRef.onSnapshot(
       (snapshotQueries) => {
@@ -50,14 +48,16 @@ function MainView() {
         console.log('Cannot read the data, error: ', error);
       }
     );
-  }
+  }*/
 
   return (
     <div>
       <Nav />
-      <p>{currentUser.email}</p>
+      <Sidebar />
       <div className={style.chat}>
-        {messagesArray
+        {currentUser ? <p>{currentUser.email}</p> : null}
+        {currentUser ? <p>{currentUser.uid}</p> : null}
+        {/*messagesArray
           ? messagesArray.map((item) => (
               <MessageBox
                 key={`${messagesArray.indexOf(item)}`}
@@ -65,7 +65,7 @@ function MainView() {
                 userId={item.user}
               />
             ))
-          : null}
+          : null */}
       </div>
       <div className={style.messagebox}>
         <input
@@ -74,7 +74,7 @@ function MainView() {
           onChange={(e) => setMessage(e.target.value)}
           value={message}
         />
-        <button className={style['messagebox_btn']} onClick={handleSubmit}>
+        <button className={style['messagebox_btn']}>
           send
           <img src={sendIcon} alt='send icon' />
         </button>

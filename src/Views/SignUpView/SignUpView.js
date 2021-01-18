@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import style from './SignUpView.module.scss';
 import { useAuth } from '../../contexts/AuthContext';
+import { useData } from '../../contexts/DataContext';
 
 function SignUpView() {
   const [email, setemail] = useState('');
@@ -10,6 +11,7 @@ function SignUpView() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
+  const { createUserInFirestore } = useData();
   const history = useHistory();
 
   async function handleSubmit(event) {
@@ -22,7 +24,14 @@ function SignUpView() {
     try {
       setError('');
       setLoading(true);
-      await signUp(email, password);
+      await signUp(email, password)
+        .then((user) => {
+          console.log(user.user.uid);
+          createUserInFirestore(user);
+        })
+        .catch((error) => {
+          console.log(`${error.code}: ${error.message}`);
+        });
       history.push('/main');
     } catch {
       setError('Failed to create an account');
@@ -71,7 +80,7 @@ function SignUpView() {
         <button disabled={loading}>Sign up</button>
       </form>
 
-      <div className=''>
+      <div className={style.subtext}>
         <p className=''>Already have an account?</p>
         <Link to='/login'>
           <button className=''>log In</button>

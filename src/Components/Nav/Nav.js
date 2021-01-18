@@ -23,6 +23,7 @@ function Nav() {
       <button className={style.btn} onClick={handleLogout}>
         logout
       </button>
+      {error ? <p>{error}</p> : null}
     </nav>
   );
 }

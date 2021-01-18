@@ -1,0 +1,13 @@
+@import '../../variables.scss';
+
+.container {
+  box-sizing: border-box;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  border-right: 1px solid $primary;
+  height: calc(100% - 55px);
+  width: 150px;
+  padding: 10px;
+}
