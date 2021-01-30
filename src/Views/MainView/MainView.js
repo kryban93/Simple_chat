@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react';
 import Nav from '../../Components/Nav/Nav';
 import style from './MainView.module.scss';
 import sendIcon from '../../assets/send.svg';
-import MessageBox from '../../Components/MessageBox/MessageBox';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import { useData } from '../../contexts/DataContext';
 import { useAuth } from '../../contexts/AuthContext';
 
 function MainView() {
   const [message, setMessage] = useState('');
-  const { currentUser, authUserWithFirebase } = useData();
+  const { currentUser, authUserWithFirebase, readRoomsList } = useData();
   const { authUser } = useAuth();
   useEffect(() => {
     //readDataFromDatabase();
     authUserWithFirebase(authUser);
   }, [authUser]);
+
+  function handleSelectRoom() {}
 
   /* async function handleSubmit(event) {
     event.preventDefault();
@@ -57,8 +58,6 @@ function MainView() {
       <Nav />
       <Sidebar />
       <div className={style.chat}>
-        {currentUser ? <p>{currentUser.email}</p> : null}
-        {currentUser ? <p>{currentUser.uid}</p> : null}
         {/*messagesArray
           ? messagesArray.map((item) => (
               <MessageBox

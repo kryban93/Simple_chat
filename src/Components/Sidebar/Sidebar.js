@@ -5,7 +5,7 @@ import createIcon from '../../assets/icons/create_black.svg';
 import joinIcon from '../../assets/icons/join_black.svg';
 
 function Sidebar() {
-  const { roomsArray, createRoom, readRoomsList } = useData();
+  const { roomsArray, createRoom, readRoomsList, joinRoom } = useData();
   const [createRoomName, setCreateRoomName] = useState('');
   const [createRoomPassword, setCreateRoomPassword] = useState('');
   const [isCreatePanelOpen, setCreatePanelState] = useState(false);
@@ -22,15 +22,28 @@ function Sidebar() {
     await createRoom(createRoomName, createRoomPassword);
   }
 
-  //function handleJoinRoom(event) {
-  //  event.preventDefault();
-  // }
+  async function handleJoinRoom(event) {
+    event.preventDefault();
+    await joinRoom(joinRoomId, joinRoomPassword);
+  }
+
+  function handleOpenCreateBox() {
+    setCreatePanelState(!isCreatePanelOpen);
+    setJoinPanelState(false);
+  }
+
+  function handleOpenJoinBox() {
+    setJoinPanelState(!isJoinPanelOpen);
+    setCreatePanelState(false);
+  }
 
   return (
     <div className={style.container}>
       <div className={style.rooms}>
         {roomsArray.map((room) => (
-          <p key={room.roomId}>{room.name}</p>
+          <p key={room.roomId}>
+            {room.name},{room.roomId}
+          </p>
         ))}
       </div>
       <div className={style.panel}>
@@ -40,7 +53,6 @@ function Sidebar() {
               onClick={() => setCreatePanelState(!isCreatePanelOpen)}
               className={style.btn_close}
             >
-              {' '}
               close
             </button>
             <input
@@ -65,7 +77,6 @@ function Sidebar() {
         {isJoinPanelOpen ? (
           <div className={style.popup}>
             <button onClick={() => setJoinPanelState(!isJoinPanelOpen)} className={style.btn_close}>
-              {' '}
               close
             </button>
             <input
@@ -84,14 +95,14 @@ function Sidebar() {
               required
               placeholder='password'
             />
-            <button>join</button>
+            <button onClick={handleJoinRoom}>join</button>
           </div>
         ) : null}
-        <button className={style.panel_btn} onClick={() => setCreatePanelState(!isCreatePanelOpen)}>
+        <button className={style.panel_btn} onClick={handleOpenCreateBox}>
           <img src={createIcon} className={style.panel_icon} alt='create room panel button' />
           create
         </button>
-        <button className={style.panel_btn} onClick={() => setJoinPanelState(!isJoinPanelOpen)}>
+        <button className={style.panel_btn} onClick={handleOpenJoinBox}>
           <img src={joinIcon} className={style.panel_icon} alt='join room panel button' />
           join
         </button>

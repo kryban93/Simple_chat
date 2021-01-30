@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { database } from '../firebase';
 import randomId from '../additional/randomId';
 
@@ -102,6 +102,38 @@ export function DataProvider({ children }) {
       });
   }
 
+  function joinRoom(roomId, password) {
+    const roomRef = roomsRef.doc(roomId);
+
+    roomRef.get().then((doc) => {
+      if (doc.exists) {
+        const tempData = doc.data();
+
+        if (tempData.password !== password) {
+          console.log('Wrong password');
+        } else {
+          console.log('correct!');
+          let tempUsers = tempData.users;
+          let roomName = tempData.name;
+          tempUsers.push(currentUser);
+
+          roomRef.update({
+            users: tempUsers,
+          });
+
+          usersRef.doc(currentUser.uid).collection('rooms').add({
+            name: roomName,
+            roomId,
+          });
+        }
+      } else {
+        console.log('No such document!');
+      }
+    });
+  }
+
+  function readMessages() {}
+
   const value = {
     roomsArray,
     createRoom,
@@ -109,6 +141,7 @@ export function DataProvider({ children }) {
     createUserInFirestore,
     authUserWithFirebase,
     readRoomsList,
+    joinRoom,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
