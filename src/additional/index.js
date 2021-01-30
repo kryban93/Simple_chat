@@ -1,3 +1,2 @@
-export function randomId() {
-  return Math.random().toString(36).substr(2, 7);
-}
+export const randomId = require('./randomId');
+export const useWindowDimensions = require('./useWindowDimensions');

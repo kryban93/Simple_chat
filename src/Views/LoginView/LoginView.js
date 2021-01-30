@@ -21,7 +21,7 @@ function LoginView() {
       setLoading(true);
       await login(emailState, passwordState)
         .then((user) => {
-          authUserWithFirebase(user);
+          authUserWithFirebase(user.user);
         })
         .catch((error) => {
           console.log(`${error.code}: ${error.message}`);
@@ -34,48 +34,48 @@ function LoginView() {
   };
 
   return (
-    <div className={style.container}>
-      <h2>Login to start chat</h2>
-      <form onSubmit={handleSubmit} className={style.form}>
-        {error && <p className=''>{error}</p>}
-        <label className=''>
-          <p>email</p>
-          <input
-            className=''
-            type='email'
-            onChange={(e) => setEmailState(e.target.value)}
-            value={emailState}
-            required
-          />
-        </label>
-        <label className=''>
-          <p>password</p>
-          <input
-            className=''
-            type='password'
-            onChange={(e) => setPasswordState(e.target.value)}
-            value={passwordState}
-            required
-          />
-        </label>
+    <div className={style.wrapper}>
+      <div className={style.container}>
+        <h2 className={style.title}>Login to start chat</h2>
+        <form onSubmit={handleSubmit} className={style.form}>
+          {error && <p className=''>{error}</p>}
+          <div>
+            <input
+              className={style.input}
+              type='email'
+              onChange={(e) => setEmailState(e.target.value)}
+              value={emailState}
+              required
+            />
+            <label className={style.label}>email</label>
+          </div>
+          <div>
+            <input
+              className={style.input}
+              type='password'
+              onChange={(e) => setPasswordState(e.target.value)}
+              value={passwordState}
+              required
+            />
+            <label className={style.label}>password</label>
+          </div>
+          <button disabled={loading} type='submit' className={`${style.btn} ${style['btn-login']}`}>
+            login
+          </button>
 
-        <button disabled={loading} type='submit' className=''>
-          login
-        </button>
-
-        <div>
-          <Link to='/forgot-password'>Forgot password?</Link>
-        </div>
-      </form>
-
-      <div className=''>
-        <p className=''>Need an account? </p>
+          <div>
+            <Link to='/forgot-password'>Forgot password?</Link>
+          </div>
+        </form>
+      </div>
+      <div className={style.subtext}>
+        <p>Need an account? </p>
         <Link to='/signup'>
-          <button className=''>sign Up</button>
+          <button className={`${style.btn} ${style['btn-signup']}`}>sign Up</button>
         </Link>
       </div>
       <Link to='/'>
-        <button className=''>back to landing page</button>
+        <button className={`${style.btn} ${style['btn-back']}`}>back to landing page</button>
       </Link>
     </div>
   );

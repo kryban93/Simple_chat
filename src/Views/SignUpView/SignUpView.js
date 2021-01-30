@@ -40,54 +40,67 @@ function SignUpView() {
   }
 
   return (
-    <div className={style.container}>
-      <h2>Sign Up form</h2>
-      <form className={style.form} onSubmit={handleSubmit}>
-        {error && <p>{error}</p>}
-        <label className={style.label}>
-          <input
-            type='email'
-            className={style.input}
-            onChange={(e) => setemail(e.target.value)}
-            value={email}
-            placeholder='email'
-            required
-          />
-          email
-        </label>
-        <label className={style.label}>
-          <input
-            type='password'
-            className={style.input}
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            placeholder='password'
-            required
-          />
-          password
-        </label>
-        <label className={style.label}>
-          <input
-            type='password'
-            className={style.input}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-            value={passwordConfirm}
-            placeholder='confirm password'
-            required
-          />
-          password confirmation
-        </label>
-        <button disabled={loading}>Sign up</button>
-      </form>
+    <div className={style.wrapper}>
+      <div className={style.container}>
+        <h2 className={style.title}>Sign Up</h2>
+        {error && <p className={style.error}>{error}</p>}
+        <form className={style.form} onSubmit={handleSubmit}>
+          <div>
+            <input
+              type='email'
+              className={style.input}
+              onChange={(e) => setemail(e.target.value)}
+              value={email}
+              placeholder=''
+              required
+              id='email'
+            />
+            <label className={style.label} htmlFor='email'>
+              email
+            </label>
+          </div>
+          <div>
+            <input
+              type='password'
+              className={style.input}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              placeholder=''
+              id='password'
+              required
+            />
+            <label className={style.label} htmlFor='password'>
+              password
+            </label>
+          </div>
+          <div>
+            <input
+              type='password'
+              className={style.input}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+              value={passwordConfirm}
+              placeholder=''
+              id='passwordconfirm'
+              required
+            />
+            <label className={style.label} htmlFor='passwordconfirm'>
+              password confirmation
+            </label>
+          </div>
 
+          <button disabled={loading} className={`${style.btn} ${style['btn-signup']}`}>
+            sign up
+          </button>
+        </form>
+      </div>
       <div className={style.subtext}>
         <p className=''>Already have an account?</p>
         <Link to='/login'>
-          <button className=''>log In</button>
+          <button className={`${style.btn} ${style['btn-login']}`}>log In</button>
         </Link>
       </div>
       <Link to='/'>
-        <button className=''>back to landing page</button>
+        <button className={`${style.btn} ${style['btn-back']}`}>back to landing page</button>
       </Link>
     </div>
   );

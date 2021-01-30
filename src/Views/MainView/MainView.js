@@ -5,14 +5,16 @@ import sendIcon from '../../assets/send.svg';
 import MessageBox from '../../Components/MessageBox/MessageBox';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import { useData } from '../../contexts/DataContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 function MainView() {
   const [message, setMessage] = useState('');
-  const { currentUser } = useData();
+  const { currentUser, authUserWithFirebase } = useData();
+  const { authUser } = useAuth();
   useEffect(() => {
     //readDataFromDatabase();
-    console.log(currentUser);
-  }, [currentUser]);
+    authUserWithFirebase(authUser);
+  }, [authUser]);
 
   /* async function handleSubmit(event) {
     event.preventDefault();

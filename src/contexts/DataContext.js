@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { database } from '../firebase';
-import { randomId } from '../additional';
+import randomId from '../additional/randomId';
 
 const DataContext = React.createContext();
 
@@ -14,14 +14,10 @@ export function DataProvider({ children }) {
   const roomsRef = database.collection('rooms');
   const usersRef = database.collection('users');
 
-  useEffect(() => {
-    readRoomsList();
-  }, []);
-
   function authUserWithFirebase(user) {
     let tempUser;
     usersRef
-      .where('uid', '==', user.user.uid)
+      .where('uid', '==', user.uid)
       .get()
       .then((query) =>
         query.forEach((doc) => {
@@ -44,7 +40,7 @@ export function DataProvider({ children }) {
 
     setCurrentUser(tempUser);
 
-    usersRef.add({
+    usersRef.doc(`${user.user.uid}`).set({
       email: tempUser.email,
       uid: tempUser.uid,
       photoUrl: tempUser.photoUrl,
@@ -52,35 +48,57 @@ export function DataProvider({ children }) {
   }
 
   function readRoomsList() {
-    roomsRef.onSnapshot(
-      (snapshotQueries) => {
-        const tempState = [];
-        snapshotQueries.forEach((doc) => {
-          tempState.push(doc.data());
-        });
-        setRoomsArray(tempState);
-      },
-      (error) => {
-        console.log('Cannot read the data, error: ', error);
-      }
-    );
+    usersRef
+      .doc(currentUser.uid)
+      .collection('rooms')
+      .onSnapshot(
+        (snapshotQueries) => {
+          const tempState = [];
+          snapshotQueries.forEach((doc) => {
+            tempState.push(doc.data());
+          });
+          setRoomsArray(tempState);
+        },
+        (error) => {
+          console.log('Cannot read the data, error: ', error);
+        }
+      );
   }
 
-  function createRoom() {
+  function createRoom(name, password) {
     const users = [];
+    let roomId;
     console.log(currentUser);
     users.push(currentUser);
+    roomId = randomId();
     roomsRef
-      .add({
-        roomId: randomId(),
-        users: users,
+      .doc(`${roomId}`)
+      .set({
+        roomId,
+        users,
         creator: currentUser,
+        name,
+        password,
       })
       .then((ref) => {
         console.log('Room created with ID', ref.id);
       })
       .catch((error) => {
         console.log('Error adding document: ', error);
+      });
+
+    usersRef
+      .doc(currentUser.uid)
+      .collection('rooms')
+      .add({
+        name,
+        roomId: roomId,
+      })
+      .then(() => {
+        console.log('Created room in user');
+      })
+      .catch((error) => {
+        console.error('error creating rooms array: ', error);
       });
   }
 
@@ -90,6 +108,7 @@ export function DataProvider({ children }) {
     currentUser,
     createUserInFirestore,
     authUserWithFirebase,
+    readRoomsList,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
