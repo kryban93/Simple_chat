@@ -9,7 +9,7 @@ function LoginView() {
   const [passwordState, setPasswordState] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
-  const { authUserWithFirebase } = useData();
+  const { authUserWithFirebase, readRoomsList } = useData();
   const [error, setError] = useState('');
   const history = useHistory();
 
@@ -22,6 +22,9 @@ function LoginView() {
       await login(emailState, passwordState)
         .then((user) => {
           authUserWithFirebase(user.user);
+        })
+        .then(() => {
+          readRoomsList();
         })
         .catch((error) => {
           console.log(`${error.code}: ${error.message}`);

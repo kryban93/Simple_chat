@@ -11,6 +11,8 @@ export function useData() {
 export function DataProvider({ children }) {
   const [roomsArray, setRoomsArray] = useState([]);
   const [currentUser, setCurrentUser] = useState();
+  const [currentRoom, setCurrentRoom] = useState();
+  const [messagesArray, setMessagesArray] = useState([]);
   const roomsRef = database.collection('rooms');
   const usersRef = database.collection('users');
 
@@ -24,6 +26,7 @@ export function DataProvider({ children }) {
           tempUser = doc.data();
           console.log(tempUser);
           setCurrentUser(tempUser);
+          console.log('Authorized with firebase!');
         })
       )
       .catch((error) => {
@@ -47,9 +50,10 @@ export function DataProvider({ children }) {
     });
   }
 
-  function readRoomsList() {
+  function readRoomsList(user) {
+    console.log('try to read rooms');
     usersRef
-      .doc(currentUser.uid)
+      .doc(user.uid)
       .collection('rooms')
       .onSnapshot(
         (snapshotQueries) => {
@@ -132,7 +136,44 @@ export function DataProvider({ children }) {
     });
   }
 
-  function readMessages() {}
+  function sendMessage(roomId, text) {
+    let messagesRef = roomsRef.doc(roomId).collection('messages');
+
+    messagesRef
+      .add({
+        text,
+        user: currentUser,
+        timestamp: Date.now(),
+      })
+      .catch((error) => {
+        console.log('error adding message: ', error);
+      });
+  }
+
+  function getAllMessages(roomId) {
+    let messagesRef = roomsRef.doc(roomId).collection('messages');
+
+    messagesRef.onSnapshot(
+      (snapshotQueries) => {
+        const tempState = [];
+        snapshotQueries.forEach((doc) => {
+          tempState.push(doc.data());
+        });
+        const sortedState = tempState.sort((a, b) => {
+          return new Date(a.timestamp) - new Date(b.timestamp);
+        });
+
+        setMessagesArray(sortedState);
+      },
+      (error) => {
+        console.log('Cannot read the data, error: ', error);
+      }
+    );
+  }
+
+  function selectRoom(roomId) {
+    setCurrentRoom(roomId);
+  }
 
   const value = {
     roomsArray,
@@ -142,6 +183,11 @@ export function DataProvider({ children }) {
     authUserWithFirebase,
     readRoomsList,
     joinRoom,
+    selectRoom,
+    currentRoom,
+    sendMessage,
+    messagesArray,
+    getAllMessages,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

@@ -4,8 +4,8 @@ import { useData } from '../../contexts/DataContext';
 import createIcon from '../../assets/icons/create_black.svg';
 import joinIcon from '../../assets/icons/join_black.svg';
 
-function Sidebar() {
-  const { roomsArray, createRoom, readRoomsList, joinRoom } = useData();
+function Sidebar({ handleSelectRoom }) {
+  const { roomsArray, createRoom, joinRoom, currentRoom, readRoomsList, currentUser } = useData();
   const [createRoomName, setCreateRoomName] = useState('');
   const [createRoomPassword, setCreateRoomPassword] = useState('');
   const [isCreatePanelOpen, setCreatePanelState] = useState(false);
@@ -14,17 +14,17 @@ function Sidebar() {
   const [isJoinPanelOpen, setJoinPanelState] = useState(false);
 
   useEffect(() => {
-    readRoomsList();
+    readRoomsList(currentUser);
   }, []);
 
-  async function handleCreateRoom(event) {
+  function handleCreateRoom(event) {
     event.preventDefault();
-    await createRoom(createRoomName, createRoomPassword);
+    createRoom(createRoomName, createRoomPassword);
   }
 
-  async function handleJoinRoom(event) {
+  function handleJoinRoom(event) {
     event.preventDefault();
-    await joinRoom(joinRoomId, joinRoomPassword);
+    joinRoom(joinRoomId, joinRoomPassword);
   }
 
   function handleOpenCreateBox() {
@@ -41,9 +41,18 @@ function Sidebar() {
     <div className={style.container}>
       <div className={style.rooms}>
         {roomsArray.map((room) => (
-          <p key={room.roomId}>
-            {room.name},{room.roomId}
-          </p>
+          <div
+            className={
+              currentRoom === room.roomId
+                ? `${style.rooms_item} ${style['rooms_item-active']}`
+                : style.rooms_item
+            }
+            key={room.roomId}
+            onClick={() => handleSelectRoom(room.roomId)}
+          >
+            <p className={style.rooms_item_title}>{room.name}</p>
+            <p className={style.rooms_item_subtext}>{room.roomId}</p>
+          </div>
         ))}
       </div>
       <div className={style.panel}>
