@@ -24,7 +24,6 @@ export function DataProvider({ children }) {
       .then((query) =>
         query.forEach((doc) => {
           tempUser = doc.data();
-          console.log(tempUser);
           setCurrentUser(tempUser);
           console.log('Authorized with firebase!');
         })
@@ -51,7 +50,6 @@ export function DataProvider({ children }) {
   }
 
   function readRoomsList(user) {
-    console.log('try to read rooms');
     usersRef
       .doc(user.uid)
       .collection('rooms')
@@ -72,7 +70,6 @@ export function DataProvider({ children }) {
   function createRoom(name, password) {
     const users = [];
     let roomId;
-    console.log(currentUser);
     users.push(currentUser);
     roomId = randomId();
     roomsRef

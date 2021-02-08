@@ -1,41 +1,28 @@
 @import '../../variables.scss';
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 200px;
+.wrapper {
+  position: relative;
 }
 
-.messagebox {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-left: 65px;
-  width: 65%;
+.container {
+  position: relative;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: space-between;
-  border: 1px solid $secondary;
-  border-radius: 14px;
+  height: calc(100vh - 50px);
+}
 
-  &_input {
-    width: 80%;
-    border: none;
-    margin-left: 20px;
-    font-size: 16px;
-  }
+.btn {
+  position: absolute;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: none;
+}
 
-  &_btn {
-    display: flex;
-    align-items: center;
-    border: none;
-    background-color: $secondary;
-    color: white;
-    font-size: 14px;
-    border-radius: 13px;
-    padding: 5px;
+@media screen and (min-width: 768px) {
+  .container {
+    margin-left: 200px;
   }
 }

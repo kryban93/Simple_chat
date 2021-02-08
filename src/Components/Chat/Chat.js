@@ -12,13 +12,13 @@ function Chat() {
 
   return (
     <div className={style.container}>
-      <p>{currentRoom}</p>
       {messagesArray
         ? messagesArray.map((item) => (
             <MessageBox
               key={`${messagesArray.indexOf(item)}`}
               text={item.text}
-              userId={item.user}
+              userId={item.user.uid}
+              timestamp={item.timestamp}
             />
           ))
         : null}

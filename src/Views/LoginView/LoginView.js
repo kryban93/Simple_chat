@@ -49,8 +49,11 @@ function LoginView() {
               onChange={(e) => setEmailState(e.target.value)}
               value={emailState}
               required
+              id='email'
             />
-            <label className={style.label}>email</label>
+            <label className={style.label} htmlFor='email'>
+              email
+            </label>
           </div>
           <div>
             <input
@@ -59,8 +62,11 @@ function LoginView() {
               onChange={(e) => setPasswordState(e.target.value)}
               value={passwordState}
               required
+              id='password'
             />
-            <label className={style.label}>password</label>
+            <label className={style.label} htmlFor='password'>
+              password
+            </label>
           </div>
           <button disabled={loading} type='submit' className={`${style.btn} ${style['btn-login']}`}>
             login

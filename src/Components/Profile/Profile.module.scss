@@ -1,0 +1,60 @@
+@import '../../variables.scss';
+
+.container {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  z-index: 2;
+}
+
+.btn {
+  border: none;
+  background: none;
+  outline: none;
+  cursor: pointer;
+
+  &-profile {
+    outline: none;
+    cursor: pointer;
+  }
+
+  &-logout {
+    border-bottom: 1px solid $secondary;
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+.icon {
+  background-color: $secondary;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  border: 3px solid $secondary;
+}
+
+.sidebar {
+  position: absolute;
+  margin: 10px 5px;
+  right: -20px;
+  padding: 5px;
+  background-color: $primary;
+  border-radius: 0.5em;
+
+  &::before {
+    box-sizing: border-box;
+    content: '';
+    position: absolute;
+    display: inline-block;
+    margin: 0 5px;
+    vertical-align: middle;
+    width: 60px;
+    height: 30px;
+    border-bottom: solid 30px $primary;
+    border-left: solid 30px transparent;
+    border-right: solid 30px transparent;
+    top: -10px;
+    right: 20px;
+    z-index: -1;
+  }
+}

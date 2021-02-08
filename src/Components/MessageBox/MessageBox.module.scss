@@ -1,12 +1,23 @@
 @import '../../variables.scss';
 
 .container {
-  background-color: $primary;
-  padding: 10px;
+  position: relative;
+  display: block;
+  background-color: $quaternary;
+  padding: 5px 10px 20px;
   margin: 5px 10px;
-  border-radius: 10px;
+  border-radius: 0.5em;
 }
 
 .text {
-  font-size: 12px;
+  font-size: calc(#{$fontXxs} / 1.2);
+  margin-right: 30px;
+}
+
+.time {
+  position: absolute;
+  font-size: calc(#{$fontXxs} / 1.5);
+  color: $grey300;
+  bottom: 0.2em;
+  right: 0.5em;
 }

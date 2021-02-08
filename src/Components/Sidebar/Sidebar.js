@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import style from './Sidebar.module.scss';
 import { useData } from '../../contexts/DataContext';
 import createIcon from '../../assets/icons/create_black.svg';
 import joinIcon from '../../assets/icons/join_black.svg';
+import closeIcon from '../../assets/icons/close_white.svg';
 
 function Sidebar({ handleSelectRoom }) {
-  const { roomsArray, createRoom, joinRoom, currentRoom, readRoomsList, currentUser } = useData();
+  const { roomsArray, createRoom, joinRoom, currentRoom } = useData();
   const [createRoomName, setCreateRoomName] = useState('');
   const [createRoomPassword, setCreateRoomPassword] = useState('');
   const [isCreatePanelOpen, setCreatePanelState] = useState(false);
   const [joinRoomId, setJoinRoomId] = useState('');
   const [joinRoomPassword, setJoinRoomPassword] = useState('');
   const [isJoinPanelOpen, setJoinPanelState] = useState(false);
-
-  useEffect(() => {
-    readRoomsList(currentUser);
-  }, []);
 
   function handleCreateRoom(event) {
     event.preventDefault();
@@ -60,51 +57,78 @@ function Sidebar({ handleSelectRoom }) {
           <div className={style.popup}>
             <button
               onClick={() => setCreatePanelState(!isCreatePanelOpen)}
-              className={style.btn_close}
+              className={`${style.btn} ${style['btn-close']}`}
             >
-              close
+              <img src={closeIcon} alt='close create room panel' />
             </button>
-            <input
-              type='text'
-              className={style.input}
-              onChange={(e) => setCreateRoomName(e.target.value)}
-              value={createRoomName}
-              required
-              placeholder='room name'
-            />
-            <input
-              type='password'
-              className={style.input}
-              onChange={(e) => setCreateRoomPassword(e.target.value)}
-              value={createRoomPassword}
-              required
-              placeholder='password'
-            />
-            <button onClick={handleCreateRoom}>create</button>
+            <div>
+              <input
+                type='text'
+                className={style.input}
+                onChange={(e) => setCreateRoomName(e.target.value)}
+                value={createRoomName}
+                required
+                id='name'
+              />
+              <label className={style.label} htmlFor='name'>
+                name
+              </label>
+            </div>
+            <div>
+              <input
+                type='password'
+                className={style.input}
+                onChange={(e) => setCreateRoomPassword(e.target.value)}
+                value={createRoomPassword}
+                required
+                id='password'
+              />
+              <label className={style.label} htmlFor='password'>
+                password
+              </label>
+            </div>
+            <button onClick={handleCreateRoom} className={`${style.btn} ${style['btn-action']}`}>
+              create
+            </button>
           </div>
         ) : null}
         {isJoinPanelOpen ? (
           <div className={style.popup}>
-            <button onClick={() => setJoinPanelState(!isJoinPanelOpen)} className={style.btn_close}>
-              close
+            <button
+              onClick={() => setJoinPanelState(!isJoinPanelOpen)}
+              className={`${style.btn} ${style['btn-close']}`}
+            >
+              <img src={closeIcon} alt='close join room panel' />
             </button>
-            <input
-              type='text'
-              className={style.input}
-              onChange={(e) => setJoinRoomId(e.target.value)}
-              value={joinRoomId}
-              required
-              placeholder='room id'
-            />
-            <input
-              type='password'
-              className={style.input}
-              onChange={(e) => setJoinRoomPassword(e.target.value)}
-              value={joinRoomPassword}
-              required
-              placeholder='password'
-            />
-            <button onClick={handleJoinRoom}>join</button>
+            <div>
+              <input
+                type='text'
+                className={style.input}
+                onChange={(e) => setJoinRoomId(e.target.value)}
+                value={joinRoomId}
+                required
+                id='roomId'
+              />
+              <label className={style.label} htmlFor='roomId'>
+                room id
+              </label>
+            </div>
+            <div>
+              <input
+                type='password'
+                className={style.input}
+                onChange={(e) => setJoinRoomPassword(e.target.value)}
+                value={joinRoomPassword}
+                required
+                id='password'
+              />
+              <label className={style.label} htmlFor='password'>
+                password
+              </label>
+            </div>
+            <button onClick={handleJoinRoom} className={`${style.btn} ${style['btn-action']}`}>
+              join
+            </button>
           </div>
         ) : null}
         <button className={style.panel_btn} onClick={handleOpenCreateBox}>

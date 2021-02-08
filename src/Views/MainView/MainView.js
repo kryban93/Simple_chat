@@ -1,89 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import Nav from '../../Components/Nav/Nav';
 import style from './MainView.module.scss';
-import sendIcon from '../../assets/send.svg';
 import Sidebar from '../../Components/Sidebar/Sidebar';
 import Chat from '../../Components/Chat/Chat';
 import { useData } from '../../contexts/DataContext';
 import { useAuth } from '../../contexts/AuthContext';
+import InputBox from '../../Components/InputBox/InputBox';
+import useWindowDimensions from '../../additional/useWindowDimensions';
+import menuIcon from '../../assets/icons/menu_black.svg';
+import closeIcon from '../../assets/icons/close_black.svg';
 
 function MainView() {
-  const [message, setMessage] = useState('');
-  const { authUserWithFirebase, currentRoom, selectRoom, sendMessage } = useData();
+  const { authUserWithFirebase, selectRoom, readRoomsList } = useData();
+  const [isSidebarVisible, setSidebarVisibleState] = useState(true);
+  const [isMenuIconVisible, setMenuIconVisibleState] = useState(false);
   const { authUser } = useAuth();
-  useEffect(() => {
-    //readDataFromDatabase();
+  const { width } = useWindowDimensions();
 
-    authUserWithFirebase(authUser);
-  }, [authUser]);
+  useEffect(() => {
+    const init = async () => {
+      await authUserWithFirebase(authUser);
+
+      readRoomsList(authUser);
+    };
+    function handleWindowResize() {
+      if (width > 768) {
+        setSidebarVisibleState(true);
+        setMenuIconVisibleState(false);
+      } else {
+        setMenuIconVisibleState(true);
+        setSidebarVisibleState(false);
+      }
+    }
+
+    handleWindowResize();
+    init();
+  }, [authUser, width]);
 
   function handleSelectRoom(roomId) {
-    console.log(roomId);
     selectRoom(roomId);
   }
 
-  function handleMessageSubmit() {
-    sendMessage(currentRoom, message);
+  function handleOpenSidebar() {
+    setSidebarVisibleState(!isSidebarVisible);
   }
 
-  /* async function handleSubmit(event) {
-    event.preventDefault();
-    await messagesRef
-      .add({
-        user: currentUser.email,
-        timestamp: Date.now(),
-        text: message,
-        photoURL: 'www.photo.com',
-      })
-      .then((ref) => {
-        console.log('Document written with ID', ref.id);
-      })
-      .catch((error) => {
-        console.log('Error adding document: ', error);
-      });
-  } */
-  /*
-  function readDataFromDatabase() {
-    messagesRef.onSnapshot(
-      (snapshotQueries) => {
-        let tempState = [];
-        snapshotQueries.forEach((doc) => {
-          tempState.push(doc.data());
-        });
-        const sortedState = tempState.sort((a, b) => {
-          return new Date(a.timestamp) - new Date(b.timestamp);
-        });
-
-        setMessagesArray(sortedState);
-      },
-      (error) => {
-        console.log('Cannot read the data, error: ', error);
-      }
-    );
-  }*/
-
   return (
-    <div>
+    <main className={style.wrapper}>
+      {isMenuIconVisible ? (
+        <button className={style.btn} onClick={() => handleOpenSidebar()}>
+          <img src={isSidebarVisible ? closeIcon : menuIcon} alt='handle sidebar open button' />
+        </button>
+      ) : null}
       <Nav />
-      <Sidebar handleSelectRoom={handleSelectRoom} />
+      {isSidebarVisible ? <Sidebar handleSelectRoom={handleSelectRoom} /> : null}
       <div className={style.container}>
-        <div className={style.chat}>
-          <Chat />
-        </div>
-        <div className={style.messagebox}>
-          <input
-            type='text'
-            className={style['messagebox_input']}
-            onChange={(e) => setMessage(e.target.value)}
-            value={message}
-          />
-          <button className={style['messagebox_btn']} onClick={() => handleMessageSubmit()}>
-            send
-            <img src={sendIcon} alt='send icon' />
-          </button>
-        </div>
+        <Chat />
+        <InputBox />
       </div>
-    </div>
+    </main>
   );
 }
 
