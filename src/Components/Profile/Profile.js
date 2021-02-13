@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './Profile.module.scss';
 import profileIcon from '../../assets/icons/profile_black.svg';
 import { useAuth } from '../../contexts/AuthContext';
@@ -7,10 +7,16 @@ import { useHistory } from 'react-router-dom';
 
 function Profile() {
   const { logout } = useAuth();
-  const { currentUser } = useData();
+  const { currentUser, setUserName } = useData();
   const history = useHistory();
   const [isProfileSidebarOpen, setProfileSidebarState] = useState(false);
   const [error, setError] = useState('');
+  const [isNameUserPanelOpen, setUserNamePanelState] = useState(false);
+  const [userName, setUserNameState] = useState('');
+
+  useEffect(() => {
+    console.log(currentUser);
+  }, []);
 
   function handleProfileSidebar() {
     setProfileSidebarState(!isProfileSidebarOpen);
@@ -25,6 +31,10 @@ function Profile() {
     }
   }
 
+  function handleUserNamePanel() {
+    setUserName(userName);
+  }
+
   return (
     <div className={style.container}>
       <button
@@ -36,11 +46,41 @@ function Profile() {
 
       {isProfileSidebarOpen ? (
         <div className={style.sidebar}>
-          <h3>{currentUser.email}</h3>
+          {'name' in currentUser ? (
+            <h3 className={style.title}>{currentUser.name}</h3>
+          ) : (
+            <h3 className={style.title}>{currentUser.email}</h3>
+          )}
+
+          <button
+            onClick={() => setUserNamePanelState(!isNameUserPanelOpen)}
+            className={`${style.btn} ${style['btn-sidebar']}`}
+          >
+            Set nickname
+          </button>
+          {isNameUserPanelOpen ? (
+            <div>
+              <input
+                onChange={(e) => setUserNameState(e.target.value)}
+                value={userName}
+                className={style.input}
+                placeholder='name'
+              />
+              <button
+                onClick={handleUserNamePanel}
+                className={`${style.btn} ${style['btn-panel']}`}
+              >
+                set name
+              </button>
+            </div>
+          ) : null}
+          <p>Set profile photo</p>
+          <p>Update password</p>
 
           <button className={`${style.btn} ${style['btn-logout']}`} onClick={() => handleLogout()}>
             logout
           </button>
+
           {error ? <p>{error}</p> : null}
         </div>
       ) : null}

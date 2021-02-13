@@ -9,6 +9,14 @@ function InputBox() {
 
   async function handleMessageSubmit() {
     await sendMessage(currentRoom, message);
+    setMessage('');
+  }
+
+  async function handleMessageEnterKeyPress(event) {
+    if (event.key === 'Enter') {
+      await sendMessage(currentRoom, message);
+      setMessage('');
+    } else return;
   }
   return (
     <div className={style.container}>
@@ -18,6 +26,7 @@ function InputBox() {
         onChange={(e) => setMessage(e.target.value)}
         value={message}
         placeholder='Write message...'
+        onKeyPress={handleMessageEnterKeyPress}
       />
       <button className={style.btn} onClick={() => handleMessageSubmit()}>
         <p>send</p>

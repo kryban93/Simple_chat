@@ -42,11 +42,36 @@ export function DataProvider({ children }) {
 
     setCurrentUser(tempUser);
 
-    usersRef.doc(`${user.user.uid}`).set({
-      email: tempUser.email,
-      uid: tempUser.uid,
-      photoUrl: tempUser.photoUrl,
-    });
+    usersRef
+      .doc(`${user.user.uid}`)
+      .set({
+        email: tempUser.email,
+        uid: tempUser.uid,
+        photoUrl: tempUser.photoUrl,
+      })
+      .then(() => {
+        console.log('User succesfully created');
+      })
+      .catch((error) => {
+        console.log('error while creating User: ', error);
+      });
+  }
+
+  function setUserName(name) {
+    usersRef
+      .doc(currentUser.uid)
+      .set(
+        {
+          name,
+        },
+        { merge: true }
+      )
+      .then(() => {
+        console.log('Succesfully set user name');
+      })
+      .catch((error) => {
+        console.log('Error while setting user name: ', error);
+      });
   }
 
   function readRoomsList(user) {
@@ -185,6 +210,7 @@ export function DataProvider({ children }) {
     sendMessage,
     messagesArray,
     getAllMessages,
+    setUserName,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
