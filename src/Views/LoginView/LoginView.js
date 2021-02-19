@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import style from './LoginView.module.scss';
 import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
+import Loader from '../../Components/Loader/Loader';
 
 function LoginView() {
   const [emailState, setEmailState] = useState('');
@@ -20,11 +21,11 @@ function LoginView() {
       setError('');
       setLoading(true);
       await login(emailState, passwordState)
-        .then((user) => {
-          authUserWithFirebase(user.user);
+        .then(async (user) => {
+          await authUserWithFirebase(user.user);
         })
-        .then(() => {
-          readRoomsList();
+        .then(async () => {
+          await readRoomsList();
         })
         .catch((error) => {
           console.log(`${error.code}: ${error.message}`);
@@ -38,6 +39,8 @@ function LoginView() {
 
   return (
     <div className={style.wrapper}>
+      {loading && <Loader />}
+
       <div className={style.container}>
         <h2 className={style.title}>Login to start chat</h2>
         <form onSubmit={handleSubmit} className={style.form}>
@@ -73,7 +76,7 @@ function LoginView() {
           </button>
 
           <div>
-            <Link to='/forgot-password'>Forgot password?</Link>
+            <Link to='/forgot'>Forgot password?</Link>
           </div>
         </form>
       </div>

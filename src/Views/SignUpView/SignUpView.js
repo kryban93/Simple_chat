@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import style from './SignUpView.module.scss';
 import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
+import Loader from '../../Components/Loader/Loader';
 
 function SignUpView() {
   const [email, setemail] = useState('');
@@ -25,9 +26,9 @@ function SignUpView() {
       setError('');
       setLoading(true);
       await signUp(email, password)
-        .then((user) => {
+        .then(async (user) => {
           console.log(user.user.uid);
-          createUserInFirestore(user);
+          await createUserInFirestore(user);
         })
         .catch((error) => {
           console.log(`${error.code}: ${error.message}`);
@@ -41,6 +42,7 @@ function SignUpView() {
 
   return (
     <div className={style.wrapper}>
+      {loading && <Loader />}
       <div className={style.container}>
         <h2 className={style.title}>Sign Up</h2>
         {error && <p className={style.error}>{error}</p>}

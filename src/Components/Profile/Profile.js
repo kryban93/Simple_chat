@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import style from './Profile.module.scss';
-import profileIcon from '../../assets/icons/profile_black.svg';
+import icons from '../../assets/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { useData } from '../../contexts/DataContext';
 import { useHistory } from 'react-router-dom';
@@ -41,7 +41,7 @@ function Profile() {
         className={`${style.btn} ${style['btn-profile']}`}
         onClick={() => handleProfileSidebar()}
       >
-        <img src={profileIcon} alt='profile button icon' className={style.icon} />
+        <img src={icons.profile_black} alt='profile button icon' className={style.icon} />
       </button>
 
       {isProfileSidebarOpen ? (

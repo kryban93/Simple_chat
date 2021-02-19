@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import style from './InputBox.module.scss';
-import sendIcon from '../../assets/icons/send.svg';
+import icons from '../../assets/icons';
 import { useData } from '../../contexts/DataContext';
 
 function InputBox() {
@@ -18,6 +18,7 @@ function InputBox() {
       setMessage('');
     } else return;
   }
+
   return (
     <div className={style.container}>
       <input
@@ -30,7 +31,7 @@ function InputBox() {
       />
       <button className={style.btn} onClick={() => handleMessageSubmit()}>
         <p>send</p>
-        <img src={sendIcon} alt='send icon' />
+        <img src={icons.send_white} alt='send icon' />
       </button>
     </div>
   );

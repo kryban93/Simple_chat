@@ -7,6 +7,11 @@
   padding: 5px 10px 20px;
   margin: 5px 10px;
   border-radius: 0.5em;
+
+  &-loggeduser {
+    background-color: $tertiary;
+    align-self: flex-end;
+  }
 }
 
 .text {

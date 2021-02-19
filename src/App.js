@@ -6,6 +6,7 @@ import LoginView from './Views/LoginView/LoginView';
 import SignUpView from './Views/SignUpView/SignUpView';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 import MainView from './Views/MainView/MainView';
+import ForgotPasswordView from './Views/ForgotPasswordView/ForgotPasswordView';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route exact path='/' component={LandingView} />
             <Route path='/login' component={LoginView} />
             <Route path='/signUp' component={SignUpView} />
+            <Route path='/forgot' component={ForgotPasswordView} />
             <PrivateRoute path='/main' component={MainView} />
           </Switch>
         </Router>

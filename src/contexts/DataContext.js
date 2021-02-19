@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { database } from '../firebase';
 import randomId from '../additional/randomId';
 
@@ -15,6 +15,14 @@ export function DataProvider({ children }) {
   const [messagesArray, setMessagesArray] = useState([]);
   const roomsRef = database.collection('rooms');
   const usersRef = database.collection('users');
+
+  useEffect(() => {
+    return () => {
+      setMessagesArray([]);
+      setCurrentRoom('');
+      setCurrentUser({});
+    };
+  }, []);
 
   function authUserWithFirebase(user) {
     let tempUser;

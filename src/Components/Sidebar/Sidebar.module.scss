@@ -17,6 +17,7 @@
 .rooms {
   display: flex;
   flex-direction: column;
+  overflow: auto;
 
   &_item {
     padding: 0.3em;

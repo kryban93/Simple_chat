@@ -39,6 +39,10 @@ function MainView() {
 
   function handleSelectRoom(roomId) {
     selectRoom(roomId);
+    if (width <= 768) {
+      setSidebarVisibleState(false);
+      setMenuIconVisibleState(true);
+    }
   }
 
   function handleOpenSidebar() {

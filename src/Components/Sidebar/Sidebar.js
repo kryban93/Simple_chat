@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import style from './Sidebar.module.scss';
 import { useData } from '../../contexts/DataContext';
-import createIcon from '../../assets/icons/create_black.svg';
-import joinIcon from '../../assets/icons/join_black.svg';
-import closeIcon from '../../assets/icons/close_white.svg';
+import icons from '../../assets/icons';
 
 function Sidebar({ handleSelectRoom }) {
   const { roomsArray, createRoom, joinRoom, currentRoom } = useData();
@@ -17,11 +15,13 @@ function Sidebar({ handleSelectRoom }) {
   function handleCreateRoom(event) {
     event.preventDefault();
     createRoom(createRoomName, createRoomPassword);
+    setCreatePanelState(false);
   }
 
   function handleJoinRoom(event) {
     event.preventDefault();
     joinRoom(joinRoomId, joinRoomPassword);
+    setJoinPanelState(false);
   }
 
   function handleOpenCreateBox() {
@@ -59,7 +59,7 @@ function Sidebar({ handleSelectRoom }) {
               onClick={() => setCreatePanelState(!isCreatePanelOpen)}
               className={`${style.btn} ${style['btn-close']}`}
             >
-              <img src={closeIcon} alt='close create room panel' />
+              <img src={icons.close_white} alt='close create room panel' />
             </button>
             <div>
               <input
@@ -98,7 +98,7 @@ function Sidebar({ handleSelectRoom }) {
               onClick={() => setJoinPanelState(!isJoinPanelOpen)}
               className={`${style.btn} ${style['btn-close']}`}
             >
-              <img src={closeIcon} alt='close join room panel' />
+              <img src={icons.close_white} alt='close join room panel' />
             </button>
             <div>
               <input
@@ -132,11 +132,15 @@ function Sidebar({ handleSelectRoom }) {
           </div>
         ) : null}
         <button className={style.panel_btn} onClick={handleOpenCreateBox}>
-          <img src={createIcon} className={style.panel_icon} alt='create room panel button' />
+          <img
+            src={icons.create_black}
+            className={style.panel_icon}
+            alt='create room panel button'
+          />
           create
         </button>
         <button className={style.panel_btn} onClick={handleOpenJoinBox}>
-          <img src={joinIcon} className={style.panel_icon} alt='join room panel button' />
+          <img src={icons.join_black} className={style.panel_icon} alt='join room panel button' />
           join
         </button>
       </div>

@@ -1,13 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './Chat.module.scss';
 import { useData } from '../../contexts/DataContext';
 import MessageBox from '../MessageBox/MessageBox';
+import Loader from '../Loader/Loader';
 
 function Chat() {
-  const { messagesArray, getAllMessages, currentRoom } = useData();
+  const { messagesArray, getAllMessages, currentRoom, currentUser } = useData();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllMessages(currentRoom);
+    async function handleLoadMessages() {
+      await getAllMessages(currentRoom);
+      setLoading(false);
+    }
+    handleLoadMessages();
+
+    return () => {
+      setLoading(true);
+    };
   }, [currentRoom]);
 
   function isUniqueUser(array, item) {
@@ -21,28 +31,32 @@ function Chat() {
   }
 
   return (
-    <div className={style.wrapper}>
-      {messagesArray
-        ? messagesArray.map((item) => (
-            <div className={style.container}>
-              {isUniqueUser(messagesArray, item) ? (
-                item.user.name === undefined ? (
-                  <p className={style.user}>{item.user.email}</p>
-                ) : (
-                  <p className={style.user}>{item.user.name}</p>
-                )
-              ) : null}
+    <>
+      {loading && <Loader />}
+      <div className={style.wrapper}>
+        {messagesArray
+          ? messagesArray.map((item) => (
+              <div className={style.container}>
+                {isUniqueUser(messagesArray, item) ? (
+                  item.user.name === undefined ? (
+                    <p className={style.user}>{item.user.email}</p>
+                  ) : (
+                    <p className={style.user}>{item.user.name}</p>
+                  )
+                ) : null}
 
-              <MessageBox
-                key={`${messagesArray.indexOf(item)}`}
-                text={item.text}
-                userId={item.user.uid}
-                timestamp={item.timestamp}
-              />
-            </div>
-          ))
-        : null}
-    </div>
+                <MessageBox
+                  key={`${messagesArray.indexOf(item)}`}
+                  text={item.text}
+                  userId={item.user.uid}
+                  timestamp={item.timestamp}
+                  isCurrentUser={item.user.uid === currentUser.uid ? true : false}
+                />
+              </div>
+            ))
+          : null}
+      </div>
+    </>
   );
 }
 
