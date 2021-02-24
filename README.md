@@ -1,5 +1,6 @@
 # Simple Room Chat
 
+Simple chat where You can create and manage chatrooms to privately talk with your friends, and other users.
 React Application created for learinng purposes. Thanks to this project i got better understanding of React Context, React Router, Firebase User Authorization, Firebase Cloud Firestore
 
 ## Technologies

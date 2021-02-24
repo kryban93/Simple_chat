@@ -1,25 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './LandingView.scss';
+import logo from '../../assets/logo.svg';
+import style from './LandingView.module.scss';
+import undrawGuysTyping from '../../assets/undraw_guys_typing.svg';
 
 const LandingView = () => {
   return (
-    <>
-      <nav className='nav'>
+    <div className={style.wrapper}>
+      <nav className={style.nav}>
+        <img src={logo} alt='logo' className={style.nav_logo} />
         <Link to='/login'>
-          <button className='nav_btn nav_btn-login'>login</button>
+          <button className={`${style.nav_btn} ${style['nav_btn-login']}`}>login</button>
         </Link>
         <Link to='/signup'>
-          <button className='nav_btn nav_btn-signup'>sign up</button>
+          <button className={`${style.nav_btn} ${style['nav_btn-signup']}`}>sign up</button>
         </Link>
       </nav>
-      <header className='header'>
-        <h1>This is Landing View. Please SignUp or Login to preview Dashboard</h1>
-      </header>
-      <section className='content'>
-        <p>This is some text about the page content.</p>
+
+      <section className={style.about} id='about'>
+        <img src={undrawGuysTyping} alt='friends writting on chat' className={style.about_img} />
+        <div className={style.about_content}>
+          <h2>
+            <strong> Plathewi </strong>makes it easy and fun to stay close to everyone You need to.
+            Create and join rooms that focus on your hobbies and itrests. Join now for free.
+          </h2>
+          <Link to='/signup' style={{ textDecoration: 'none' }}>
+            <button className={`${style.btn} ${style['btn-signup']}`}>sign up</button>
+          </Link>
+        </div>
       </section>
-    </>
+    </div>
   );
 };
 

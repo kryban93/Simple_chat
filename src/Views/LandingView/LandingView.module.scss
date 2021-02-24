@@ -1,0 +1,88 @@
+@import '../../variables.scss';
+
+.nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  background-color: aliceblue;
+
+  &_logo {
+    height: 50px;
+  }
+
+  &_btn {
+    box-sizing: border-box;
+    padding: 5px 15px;
+    margin: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: transform 0.1s ease-in;
+    border-radius: 25px;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    &-login {
+      border: 1px solid $tertiary;
+    }
+
+    &-signup {
+      border: 1px solid $secondary;
+    }
+  }
+}
+
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  margin: 100px 20px;
+
+  &_img {
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  &_content {
+    margin: 20px;
+
+    & > h2 {
+      font-size: $fontXs;
+      line-height: 1.3em;
+      text-align: justify;
+    }
+  }
+}
+
+.btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  border-radius: 0.3em;
+  margin: 50px auto;
+
+  &-signup {
+    display: block;
+    padding: 0.7em 3em;
+    background-color: $secondary;
+    font-size: $fontXxs;
+    color: white;
+    text-decoration: none;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .about {
+    flex-direction: row;
+    max-width: 1260px;
+
+    &_img {
+      width: 500px;
+    }
+  }
+}

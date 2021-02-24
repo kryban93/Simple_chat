@@ -1,6 +1,7 @@
 import React from 'react';
 import style from './MessageBox.module.scss';
 import { useData } from '../../contexts/DataContext';
+import PropTypes from 'prop-types';
 
 function MessageBox({ text, userId, photoUrl, timestamp, isCurrentUser }) {
   const { currentUser } = useData();
@@ -23,3 +24,10 @@ function MessageBox({ text, userId, photoUrl, timestamp, isCurrentUser }) {
 }
 
 export default MessageBox;
+
+MessageBox.propTypes = {
+  text: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
+  timestamp: PropTypes.string.isRequired,
+  isCurrentUser: PropTypes.bool.isRequired,
+};

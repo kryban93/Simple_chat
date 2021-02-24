@@ -3,6 +3,7 @@ import style from './Chat.module.scss';
 import { useData } from '../../contexts/DataContext';
 import MessageBox from '../MessageBox/MessageBox';
 import Loader from '../Loader/Loader';
+import PropTypes from 'prop-types';
 
 function Chat() {
   const { messagesArray, getAllMessages, currentRoom, currentUser } = useData();
@@ -36,7 +37,13 @@ function Chat() {
       <div className={style.wrapper}>
         {messagesArray
           ? messagesArray.map((item) => (
-              <div className={style.container}>
+              <div
+                className={
+                  item.user.uid === currentUser.uid
+                    ? `${style.container} ${style['container-loggeduser']}`
+                    : style.container
+                }
+              >
                 {isUniqueUser(messagesArray, item) ? (
                   item.user.name === undefined ? (
                     <p className={style.user}>{item.user.email}</p>
@@ -61,3 +68,14 @@ function Chat() {
 }
 
 export default Chat;
+
+Chat.propTypes = {
+  messagesArray: PropTypes.array.isRequired,
+  getAllMessages: PropTypes.isRequired,
+  currentRoom: PropTypes.string.isRequired,
+  currentUser: PropTypes.object.isRequired,
+};
+
+Chat.defaultValues = {
+  currentRoom: '',
+};
