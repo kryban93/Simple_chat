@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import style from './Chat.module.scss';
 import { useData } from '../../contexts/DataContext';
 import MessageBox from '../MessageBox/MessageBox';
@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 function Chat() {
   const { messagesArray, getAllMessages, currentRoom, currentUser } = useData();
   const [loading, setLoading] = useState(true);
+  const messagesScrollRef = useRef(null);
 
   useEffect(() => {
     async function handleLoadMessages() {
@@ -15,6 +16,7 @@ function Chat() {
       setLoading(false);
     }
     handleLoadMessages();
+    //scrollToBottom();
 
     return () => {
       setLoading(true);
@@ -29,6 +31,10 @@ function Chat() {
     } else {
       return false;
     }
+  }
+
+  function scrollToBottom() {
+    messagesScrollRef.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   return (
@@ -62,6 +68,9 @@ function Chat() {
               </div>
             ))
           : null}
+        {
+          //<div ref={messagesScrollRef} />
+        }
       </div>
     </>
   );

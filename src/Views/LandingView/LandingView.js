@@ -22,11 +22,12 @@ const LandingView = () => {
         <div className={style.about_content}>
           <h2>
             <strong> Plathewi </strong>makes it easy and fun to stay close to everyone You need to.
-            Create and join rooms that focus on your hobbies and itrests. Join now for free.
+            Create and join rooms that focus on your hobbies and itrests.{' '}
+            <Link to='/signup' style={{ color: 'blue' }}>
+              Join now
+            </Link>{' '}
+            for free.
           </h2>
-          <Link to='/signup' style={{ textDecoration: 'none' }}>
-            <button className={`${style.btn} ${style['btn-signup']}`}>sign up</button>
-          </Link>
         </div>
       </section>
     </div>

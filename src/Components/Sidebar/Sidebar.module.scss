@@ -14,10 +14,16 @@
   z-index: 2;
 }
 
+.error {
+  color: red;
+  font-weight: $bold;
+}
+
 .rooms {
   display: flex;
   flex-direction: column;
   overflow: auto;
+  padding-bottom: 30px;
 
   &_item {
     padding: 0.3em;

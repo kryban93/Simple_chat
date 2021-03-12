@@ -7,6 +7,7 @@ import SignUpView from './Views/SignUpView/SignUpView';
 import PrivateRoute from './Components/PrivateRoute/PrivateRoute';
 import MainView from './Views/MainView/MainView';
 import ForgotPasswordView from './Views/ForgotPasswordView/ForgotPasswordView';
+import Error from './Components/Error/Error';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <PrivateRoute path='/main' component={MainView} />
           </Switch>
         </Router>
+        <Error />
       </DataProvider>
     </AuthProvider>
   );

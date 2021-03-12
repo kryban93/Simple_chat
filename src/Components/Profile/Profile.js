@@ -31,8 +31,8 @@ function Profile() {
     }
   }
 
-  function handleUserNamePanel() {
-    setUserName(userName);
+  async function handleUserNamePanel() {
+    await setUserName(userName);
   }
 
   return (
@@ -59,7 +59,7 @@ function Profile() {
             Set nickname
           </button>
           {isNameUserPanelOpen ? (
-            <div>
+            <div className={style.popup}>
               <input
                 onChange={(e) => setUserNameState(e.target.value)}
                 value={userName}
@@ -74,8 +74,8 @@ function Profile() {
               </button>
             </div>
           ) : null}
-          <p>Set profile photo</p>
-          <p>Update password</p>
+          <button className={`${style.btn} ${style['btn-sidebar']}`}>Set profile photo</button>
+          <button className={`${style.btn} ${style['btn-sidebar']}`}>Update password</button>
 
           <button className={`${style.btn} ${style['btn-logout']}`} onClick={() => handleLogout()}>
             logout

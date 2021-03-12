@@ -11,15 +11,22 @@ function Sidebar({ handleSelectRoom }) {
   const [joinRoomId, setJoinRoomId] = useState('');
   const [joinRoomPassword, setJoinRoomPassword] = useState('');
   const [isJoinPanelOpen, setJoinPanelState] = useState(false);
+  const [error, setError] = useState();
 
   function handleCreateRoom(event) {
     event.preventDefault();
-    createRoom(createRoomName, createRoomPassword);
-    setCreatePanelState(false);
+    if (createRoomPassword.length <= 3) {
+      setError('Password need at least 4 letters');
+    } else {
+      createRoom(createRoomName, createRoomPassword);
+      setCreatePanelState(false);
+      setError();
+    }
   }
 
   function handleJoinRoom(event) {
     event.preventDefault();
+
     joinRoom(joinRoomId, joinRoomPassword);
     setJoinPanelState(false);
   }
@@ -61,6 +68,7 @@ function Sidebar({ handleSelectRoom }) {
             >
               <img src={icons.close_white} alt='close create room panel' />
             </button>
+
             <div>
               <input
                 type='text'
@@ -87,6 +95,7 @@ function Sidebar({ handleSelectRoom }) {
                 password
               </label>
             </div>
+            {error ? <p className={style.error}>{error}</p> : null}
             <button onClick={handleCreateRoom} className={`${style.btn} ${style['btn-action']}`}>
               create
             </button>

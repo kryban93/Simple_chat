@@ -1,0 +1,11 @@
+@import '../../variables.scss';
+
+.container {
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  z-index: 3;
+  background-color: $tertiary;
+  padding: 30px;
+  border-radius: 20px;
+}

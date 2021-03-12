@@ -8,7 +8,6 @@ function MessageBox({ text, userId, photoUrl, timestamp, isCurrentUser }) {
   const hours = new Date(timestamp).getHours();
   const minutes = new Date(timestamp).getMinutes();
 
-  console.log(`${userId} ${currentUser.uid}`);
   return (
     <div
       className={
@@ -17,7 +16,7 @@ function MessageBox({ text, userId, photoUrl, timestamp, isCurrentUser }) {
     >
       <p className={style.text}>{text}</p>
       <p className={style.time}>
-        {hours}:{minutes}
+        {hours}:{minutes < 10 ? `0${minutes}` : minutes}
       </p>
     </div>
   );
@@ -28,6 +27,6 @@ export default MessageBox;
 MessageBox.propTypes = {
   text: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
-  timestamp: PropTypes.string.isRequired,
+  timestamp: PropTypes.number.isRequired,
   isCurrentUser: PropTypes.bool.isRequired,
 };

@@ -6,9 +6,12 @@
   align-items: center;
   height: 50px;
   background-color: aliceblue;
+  justify-content: space-between;
 
   &_logo {
     height: 50px;
+    flex-grow: 4;
+    align-self: flex-start;
   }
 
   &_btn {
@@ -20,6 +23,7 @@
     cursor: pointer;
     transition: transform 0.1s ease-in;
     border-radius: 25px;
+    outline: none;
 
     &:hover {
       transform: scale(1.2);

@@ -13,6 +13,7 @@ export function DataProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [currentRoom, setCurrentRoom] = useState();
   const [messagesArray, setMessagesArray] = useState([]);
+  const [error, setError] = useState('');
   const roomsRef = database.collection('rooms');
   const usersRef = database.collection('users');
 
@@ -37,7 +38,7 @@ export function DataProvider({ children }) {
         })
       )
       .catch((error) => {
-        console.log('error getting users list: ', error);
+        setError('error getting users list: ', error);
       });
   }
 
@@ -61,7 +62,7 @@ export function DataProvider({ children }) {
         console.log('User succesfully created');
       })
       .catch((error) => {
-        console.log('error while creating User: ', error);
+        setError('error while creating User: ', error);
       });
   }
 
@@ -78,7 +79,7 @@ export function DataProvider({ children }) {
         console.log('Succesfully set user name');
       })
       .catch((error) => {
-        console.log('Error while setting user name: ', error);
+        setError('Error while setting user name: ', error);
       });
   }
 
@@ -95,7 +96,7 @@ export function DataProvider({ children }) {
           setRoomsArray(tempState);
         },
         (error) => {
-          console.log('Cannot read the data, error: ', error);
+          setError('Cannot read the data, error: ', error);
         }
       );
   }
@@ -118,7 +119,7 @@ export function DataProvider({ children }) {
         console.log('Room created with ID', ref.id);
       })
       .catch((error) => {
-        console.log('Error adding document: ', error);
+        setError('Error adding document: ', error);
       });
 
     usersRef
@@ -132,7 +133,7 @@ export function DataProvider({ children }) {
         console.log('Created room in user');
       })
       .catch((error) => {
-        console.error('error creating rooms array: ', error);
+        setError('error creating rooms array: ', error);
       });
   }
 
@@ -144,7 +145,7 @@ export function DataProvider({ children }) {
         const tempData = doc.data();
 
         if (tempData.password !== password) {
-          console.log('Wrong password');
+          setError('Wrong password');
         } else {
           console.log('correct!');
           let tempUsers = tempData.users;
@@ -161,7 +162,7 @@ export function DataProvider({ children }) {
           });
         }
       } else {
-        console.log('No such document!');
+        setError('No such room!');
       }
     });
   }
@@ -176,15 +177,15 @@ export function DataProvider({ children }) {
         timestamp: Date.now(),
       })
       .catch((error) => {
-        console.log('error adding message: ', error);
+        setError('error adding message: ', error);
       });
   }
 
-  function getAllMessages(roomId) {
+  async function getAllMessages(roomId) {
     let messagesRef = roomsRef.doc(roomId).collection('messages');
 
     messagesRef.onSnapshot(
-      (snapshotQueries) => {
+      async (snapshotQueries) => {
         const tempState = [];
         snapshotQueries.forEach((doc) => {
           tempState.push(doc.data());
@@ -196,7 +197,7 @@ export function DataProvider({ children }) {
         setMessagesArray(sortedState);
       },
       (error) => {
-        console.log('Cannot read the data, error: ', error);
+        setError('Cannot read the data, error: ', error);
       }
     );
   }
@@ -219,6 +220,7 @@ export function DataProvider({ children }) {
     messagesArray,
     getAllMessages,
     setUserName,
+    error,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
